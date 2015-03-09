@@ -5,12 +5,12 @@ var RadarChart = {
     h: 600,
     factor: 0.95,
     factorLegend: 1,
-    levels: 3,
+    levels: 8,
     levelTick: false,
     TickLength: 10,
-    maxValue: 0,
+    maxValue: 6,
     radians: 2 * Math.PI,
-    color: d3.scale.category10(),
+    color: "#777777",//d3.scale.category10(),
     axisLine: true,
     axisText: true,
     circles: true,
@@ -19,7 +19,7 @@ var RadarChart = {
       return d.className || i;
     },
     transitionDuration: 300
-  },
+  }, //end defaultconfig def
   chart: function() {
     // default config
     var cfg = Object.create(RadarChart.defaultConfig);
@@ -29,18 +29,21 @@ var RadarChart = {
         var container = d3.select(this);
 
         // allow simple notation
-        data = data.map(function(datum) {
+        data = data.map(function(datum) { 
           if(datum instanceof Array) {
             datum = {axes: datum};
           }
           return datum;
         });
 
+		//whichever is larger of config max or data max
         var maxValue = Math.max(cfg.maxValue, d3.max(data, function(d) { 
           return d3.max(d.axes, function(o){ return o.value; });
         }));
 
-        var allAxis = data[0].axes.map(function(i, j){ return {name: i.axis, xOffset: (i.xOffset)?i.xOffset:0, yOffset: (i.yOffset)?i.yOffset:0}; });
+        var allAxis = data[0].axes.map(function(i, j){ 
+        	return {name: i.axis, xOffset: (i.xOffset)?i.xOffset:0, yOffset: (i.yOffset)?i.yOffset:0}; });
+        
         var total = allAxis.length;
         var radius = cfg.factor * Math.min(cfg.w / 2, cfg.h / 2);
 
@@ -174,7 +177,7 @@ var RadarChart = {
         });
 
         var polygon = container.selectAll(".area").data(data, cfg.axisJoin);
-
+       
         polygon.enter().append('polygon')
           .classed({area: 1, 'd3-enter': 1})
           .on('mouseover', function (d){
@@ -185,6 +188,7 @@ var RadarChart = {
             container.classed('focus', 0);
             d3.select(this).classed('focused', 0);
           });
+         
 
         polygon.exit()
           .classed('d3-exit', 1) // trigger css transition
@@ -289,13 +293,14 @@ var RadarChart = {
           // ensure tooltip is upmost layer
           var tooltipEl = tooltip.node();
           tooltipEl.parentNode.appendChild(tooltipEl);
-        }
+        } //just for drawing circles on the polygon?-eb
       });
-    }
+    } //end radar(selection)
 
+	//a function to create a new configuration that overrides the default above
     radar.config = function(value) {
       if(!arguments.length) {
-        return cfg;
+        return cfg; //if nothing was supplied return the default
       }
       if(arguments.length > 1) {
         cfg[arguments[0]] = arguments[1];
@@ -306,10 +311,10 @@ var RadarChart = {
         });
       }
       return radar;
-    };
+    }; //end radar.config
 
     return radar;
-  },
+  }, //end chart def
   draw: function(id, d, options) {
     var chart = RadarChart.chart().config(options);
     var cfg = chart.config();
@@ -321,5 +326,5 @@ var RadarChart = {
       .attr("height", cfg.h)
       .datum(d)
       .call(chart);
-  }
-};
+  } //end draw function def
+}; //end radarchart object def

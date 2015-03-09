@@ -73,26 +73,21 @@
   	var select = d3.select("body")
       .append("div")
       .append("select")
-
-	//var foundID;
 	
-    select
-      .on("change", function(d) {
-        var value = d3.select(this).property("value");
-        
-        //console.log(value);
-        
-        var foundID = sScores.findIndex(function(d,i,a) {
-         if (d.studentID==value) {//console.log("got it" + i);
-          return d;} 
-        });
+    select.on("change", function(d) {
+        	var value = d3.select(this).property("value");
+       
+        	var foundID = sScores.findIndex(function(d,i,a) {
+         		if (d.studentID==value) {//console.log("got it" + i);
+         		 return d;} 
+        	});
 
-        RadarChart.draw(".chart-container", [sScores[foundID]]);
+        	RadarChart.draw(".chart-container", [sScores[foundID]]);
         
-        d3.select(".chart-container").select("svg").select(".area")
-    		.style("fill", colorScale(sScores[foundID].studentID));
+        	d3.select(".chart-container").select("svg").select(".area")
+    			.style("fill", colorScale(sScores[foundID].studentID));
         
-      }); //end change callback
+      	}); //end change callback
 
     select.selectAll("option")
       .data(rows)
@@ -102,20 +97,7 @@
         .property("selected", function(d) { if (d.studentID==0) {return true;} else {return false;}})
         .text(function (d) { return "Student#_" + d.studentID; });
 
-//------
-  	/*  var chart2 = RadarChart.chart();
-  var cfg = chart2.config(); // retrieve default config //could make changes here -eb
-  var svg = d3.select('body').append('svg')
-    .attr('width', cfg.w)
-    .attr('height', cfg.h + cfg.h / 4); //height plus 1/4 to add group of radars below.
-  svg.append('g').classed('single', 1).datum([sScores[6]]).call(chart2);
-  
-  
-      game
-      .attr('transform', function(d, i) { return 'translate('+(i * cfg.w)+','+ (cfg.h * 4) +')'; })
-      .call(chart);
-   */   
-      
+
 	}); //end callback
    
    
@@ -126,38 +108,6 @@
 
 <body>
 
-  <!--
-
-  <script type="text/javascript">
-  var chart = RadarChart.chart();
-  var cfg = chart.config(); // retrieve default config //could make changes here -eb
-  var svg = d3.select('body').append('svg')
-    .attr('width', cfg.w)
-    .attr('height', cfg.h + cfg.h / 4); //height plus 1/4 to add group of radars below.
-  svg.append('g').classed('single', 1).datum(sScores[6]).call(chart);
-
-  // many radars
-  //could turn into a filmstrip slider?
-  //can overwrite individual default attributes with the config function below
-  chart.config({w: cfg.w / 4, h: cfg.h / 4, axisText: false, levels: 0, circles: false}); 
-  cfg = chart.config();
-  function render() {
-    var game = svg.selectAll('g.game').data(
-      [
-sScores[2],sScores[3],sScores[4],sScores[5]
-      ]
-    );
-    game.enter().append('g').classed('game', 1);
-    
-    game
-      .attr('transform', function(d, i) { return 'translate('+(i * cfg.w)+','+ (cfg.h * 4) +')'; })
-      .call(chart);
-
-    setTimeout(render, 1000);
-  }
-  render();
-  </script>
--->
 
   <h2>506 2015 Student Spiders</h2>
 
